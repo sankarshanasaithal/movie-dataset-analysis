@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-
 public class DataLoading {
     public static Map<Integer, Directors> loadDirectors(String filePath) {
         Map<Integer, Directors> directors = new HashMap<>();
@@ -51,7 +50,8 @@ public class DataLoading {
             br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);  // Handles commas within quotes
+
                 int movieId = Integer.parseInt(data[0].trim());
                 String title = data[1].trim();
                 int releaseYear = Integer.parseInt(data[2].trim());
@@ -59,7 +59,9 @@ public class DataLoading {
                 float rating = Float.parseFloat(data[4].trim());
                 int duration = Integer.parseInt(data[5].trim());
                 int directorId = Integer.parseInt(data[6].trim());
-                String[] actorIdsStr = data[7].replace("\"", "").split(",");
+
+                // Correctly parse actorIds
+                String[] actorIdsStr = data[7].replaceAll("\"", "").split(",");
                 int[] actorIds = Arrays.stream(actorIdsStr)
                         .mapToInt(id -> Integer.parseInt(id.trim()))
                         .toArray();

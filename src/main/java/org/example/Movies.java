@@ -56,10 +56,10 @@ public class Movies {
     public String toString() {
         return "Movie ID: " + movieId +
                 ", Title: " + title +
-                ", Genre: " + genre +
                 ", Year: " + releaseYear +
-                ", Duration: " + duration +
+                ", Genre: " + genre +
                 ", Rating: " + rating +
+                ", Duration: " + duration +
                 ", Director ID: " + directorId +
                 ", Actor IDs: " + Arrays.toString(actorIds);
     }

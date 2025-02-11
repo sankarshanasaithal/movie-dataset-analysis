@@ -19,6 +19,7 @@ public class MovieFunctions {
     }
 
     public void getMovieInformation(String identifier) {
+        final long startTime = System.currentTimeMillis();
         movies.values().stream()
                 .filter(movie ->
                         movie.getMovieId() == (identifier.matches("\\d+") ? Integer.parseInt(identifier) : -1) ||
@@ -39,24 +40,33 @@ public class MovieFunctions {
                         System.out.println(actor != null ? actor : "Actor Not Found");
                     }
                 }, () -> System.out.println("Movie not found."));
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getTopRatedMovies() {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Top 10 Rated Movies ===");
         movies.values().stream()
                 .sorted(Comparator.comparing(Movies::getRating).reversed())
                 .limit(10)
                 .forEach(System.out::println);
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getMoviesByGenre(String genre) {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Movies in " + genre + " Genre ===");
         movies.values().stream()
                 .filter(movie -> movie.getGenre().equalsIgnoreCase(genre))
                 .forEach(System.out::println);
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getMoviesByDirector(String directorName) {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Movies by Director: " + directorName + " ===");
         int[] directorIds = directors.values().stream()
                 .filter(d -> d.getName().equalsIgnoreCase(directorName))
@@ -66,23 +76,32 @@ public class MovieFunctions {
         movies.values().stream()
                 .filter(movie -> Arrays.stream(directorIds).anyMatch(id -> id == movie.getDirectorId()))
                 .forEach(System.out::println);
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getMoviesByReleaseYear(int year) {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Movies Released in " + year + " ===");
         movies.values().stream()
                 .filter(movie -> movie.getReleaseYear() == year)
                 .forEach(System.out::println);
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getMoviesByReleaseYearRange(int startYear, int endYear) {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Movies Released between " + startYear + " and " + endYear + " ===");
         movies.values().stream()
                 .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
                 .forEach(System.out::println);
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void addNewMovie(Movies newMovie) {
+        final long startTime = System.currentTimeMillis();
         newMovie = new Movies(
                 nextMovieId++,
                 newMovie.getDirectorId(),
@@ -95,9 +114,12 @@ public class MovieFunctions {
         );
         movies.put(newMovie.getMovieId(), newMovie);
         System.out.println("Movie added successfully with ID: " + newMovie.getMovieId());
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void updateMovieRating(int movieId, float newRating) {
+        final long startTime = System.currentTimeMillis();
         Movies movie = movies.get(movieId);
         if (movie != null) {
             movies.put(movieId, new Movies(
@@ -114,25 +136,34 @@ public class MovieFunctions {
         } else {
             System.out.println("Movie not found.");
         }
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void deleteMovie(int movieId) {
+        final long startTime = System.currentTimeMillis();
         if (movies.remove(movieId) != null) {
             System.out.println("Movie deleted successfully.");
         } else {
             System.out.println("Movie not found.");
         }
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void sortMoviesByReleaseYear() {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Top 15 Movies Sorted by Release Year ===");
         movies.values().stream()
                 .sorted(Comparator.comparing(Movies::getReleaseYear))
                 .limit(15)
                 .forEach(System.out::println);
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getTopDirectorsWithMostMovies() {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Top 5 Directors with Most Movies ===");
         Map<Integer, Long> directorMovieCounts = movies.values().stream()
                 .collect(Collectors.groupingBy(Movies::getDirectorId, Collectors.counting()));
@@ -144,9 +175,12 @@ public class MovieFunctions {
                     Directors director = directors.get(entry.getKey());
                     System.out.println(director.getName() + ": " + entry.getValue() + " movies");
                 });
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getActorsInMostMovies() {
+        final long startTime = System.currentTimeMillis();
         System.out.println("=== Actors in Most Movies ===");
         Map<Integer, Long> actorMovieCounts = movies.values().stream()
                 .flatMap(movie -> Arrays.stream(movie.getActorIds()).boxed())
@@ -159,9 +193,12 @@ public class MovieFunctions {
                     Actors actor = actors.get(entry.getKey());
                     System.out.println(actor.getName() + ": " + entry.getValue() + " movies");
                 });
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) + " ms");
     }
 
     public void getMoviesOfYoungestActor() {
+        final long startTime = System.currentTimeMillis();
         LocalDate referenceDate = LocalDate.of(2025, 2, 10);
         Actors youngestActor = actors.values().stream()
                 .min(Comparator.comparing(actor -> {
@@ -182,12 +219,13 @@ public class MovieFunctions {
                     referenceDate
             ).getYears();
             System.out.println("Age: " + age + " years");
-
             System.out.println("Movies:");
             movies.values().stream()
                     .filter(movie -> Arrays.stream(movie.getActorIds())
                             .anyMatch(id -> id == youngestActor.getActorId()))
                     .forEach(System.out::println);
+            final long endTime = System.currentTimeMillis();
+            System.out.println("Total execution time: " + (endTime - startTime) + " ms");
         }
     }
 }
